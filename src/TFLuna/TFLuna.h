@@ -1,9 +1,11 @@
-#ifndef TF_LUNA_h
-#define TF_LUNA_h
+#ifndef TF_LUNA_H__
+#define TF_LUNA_H__
 
-#include <Arduino>
+#include "TFBase.h"
+#include <Arduino.h>
 
-class TFLuna : public TFBase{
+
+class TFLuna : public TFBase {
     public:
         void begin(void);
         uint8_t get_distance(void);
@@ -16,5 +18,5 @@ class TFLuna : public TFBase{
         bool reset(uint8_t * cmd);
         bool factory_reset(uint8_t * cmd);
         bool save(uint8_t * cmd);
-    };
+};
 #endif

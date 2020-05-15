@@ -1,15 +1,14 @@
-#ifndef TF_LIDAR_h
-#define TF_LIDAR_h
+#ifndef TF_LIDAR_H__
+#define TF_LIDAR_H__
 
-#include <Arduino>
 #include "TFBase.h"
+#include <Arduino.h>
+
 
 class TFLidar{
   public:
-    
     TFLidar(TFBase *TF_Lidar);
-    int get_data(void);
-  private:
+    uint8_t get_data(void);
   
 };
 #endif

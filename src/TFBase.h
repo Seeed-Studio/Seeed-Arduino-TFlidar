@@ -1,9 +1,9 @@
-#ifndef TF_BASE_H_
-#define TF_BASE_H_
+#ifndef TF_BASE_H__
+#define TF_BASE_H__
 
 #include <stdbool.h>
 #include <stdint.h>
-class TFBase{
+class TFBase {
     public:
         virtual void begin(void) = 0;
         virtual uint8_t get_distance(void) = 0;
@@ -16,6 +16,6 @@ class TFBase{
         virtual bool reset(uint8_t * cmd) = 0;
         virtual bool factory_reset(uint8_t * cmd) = 0;
         virtual bool save(uint8_t * cmd) = 0;
-}
+};
 #include "TFLuna/TFLuna.h"
 #endif
