@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
-// #define DEBUG_EN
+#define DEBUG_EN
 #define RECV_HEADER 0x59
 typedef struct {
     uint8_t header[2];
@@ -14,6 +14,11 @@ typedef struct {
     uint8_t chip_temperature[2];
     uint16_t checksum;
 } recv_package;
+typedef enum{
+    SAMPLERATE_1HZ = 0,
+    SAMPLERATE_10HZ,
+    SAMPLERATE_100HZ,
+}samplerate_mode;
 
 class TFBase {
     public:
@@ -23,13 +28,13 @@ class TFBase {
         virtual uint16_t get_strength(void) = 0;
         virtual uint8_t get_chip_temperature(void) = 0;
         virtual uint16_t get_version(void) = 0;
-        virtual bool set_output_status(uint8_t * cmd) = 0;
+        virtual bool set_output_status(bool status) = 0;
         virtual bool set_comunication_mode(uint8_t * cmd) = 0;
-        virtual bool set_frame_rate(uint8_t * cmd) = 0;
-        virtual bool reset(uint8_t * cmd) = 0;
-        virtual bool factory_reset(uint8_t * cmd) = 0;
-        virtual bool save(uint8_t * cmd) = 0;
-        virtual bool get_frame_data(void) = 0;
+        virtual bool set_frame_rate(samplerate_mode mode) = 0;
+        virtual bool reset_device() = 0;
+        virtual bool factory_reset() = 0;
+        virtual bool save_config() = 0;
+        virtual bool get_frame_data() = 0;
     protected:
         virtual bool check_header(recv_package *package);
         virtual bool verify_data(recv_package *package);

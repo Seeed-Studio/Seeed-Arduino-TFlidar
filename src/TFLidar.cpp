@@ -27,3 +27,31 @@ uint8_t TFLidar::get_chip_temperature(){
 bool TFLidar::get_frame_data(){
     return _TF_Lidar->get_frame_data();
 }
+
+uint16_t TFLidar::get_version(void){
+    return _TF_Lidar->get_version();
+}
+
+
+bool TFLidar::set_frame_rate(samplerate_mode mode){
+    return _TF_Lidar->set_frame_rate(mode);
+}
+
+bool TFLidar::set_output_status(bool status){
+    return _TF_Lidar->set_output_status(status);
+}
+bool TFLidar::reset_device(){
+    return _TF_Lidar->reset_device();
+}
+
+bool TFLidar::factory_reset(void){
+    return _TF_Lidar->factory_reset();
+}
+
+bool TFLidar::save_config(void){
+    return _TF_Lidar->save_config();
+}
+
+// bool TFLidar::set_baud_rate(void){
+//     return _TF_Lidar->set_baud_rate();
+// }

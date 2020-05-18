@@ -11,18 +11,26 @@ class TFLuna : public TFBase {
         uint16_t get_distance(void);
         uint16_t get_strength(void);
         uint8_t get_chip_temperature(void);
-        uint16_t get_version(void){};
-        bool set_output_status(uint8_t * cmd){};
+        uint16_t get_version(void);
+        bool set_output_status(bool status);
         bool set_comunication_mode(uint8_t * cmd){};
-        bool set_frame_rate(uint8_t * cmd){};
-        bool reset(uint8_t * cmd){};
-        bool factory_reset(uint8_t * cmd){};
-        bool save(uint8_t * cmd){};
+        bool set_frame_rate(samplerate_mode mode);
+        bool reset_device(void);
+        bool factory_reset(void);
+        bool save_config(void);
+        // bool set_baud_rate(void);
         bool get_frame_data(void);
     private:
         Stream *_TFTransporter;
         recv_package *_package = (recv_package*) malloc(sizeof(recv_package));
         uint8_t uart[9];  //save data measured by LiDAR
+        //The parameter configuration function, down is the instruction to be written,
+        //n1 is the number of downs,buff receives response data,
+        //up receives theoretical response data in communication protocols,
+        //n2 is the number of buff data,info is the prompt information of corresponding instructions
+        bool configure(char down[],int n1,int buff[],char up[],int n2,String info);
+        bool configure(char down[],int n1,int buff[],int n2,String info);
+        bool configure(char down[],int n1,String info);
     protected:
         bool check_header(recv_package *package);
         bool verify_data(recv_package *package);
