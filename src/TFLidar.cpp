@@ -20,6 +20,10 @@ uint16_t TFLidar::get_strength(){
     return _TF_Lidar->get_strength();
 }
 
-uint16_t TFLidar::get_chip_temperature(){
+uint8_t TFLidar::get_chip_temperature(){
     return _TF_Lidar->get_chip_temperature();
+}
+
+bool TFLidar::get_frame_data(){
+    return _TF_Lidar->get_frame_data();
 }

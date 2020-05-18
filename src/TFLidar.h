@@ -11,7 +11,8 @@ class TFLidar{
     void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200);
     uint16_t get_distance(void);
     uint16_t get_strength(void);
-    uint16_t get_chip_temperature(void);
+    uint8_t get_chip_temperature(void);
+    bool get_frame_data(void);
   private:
     TFBase *_TF_Lidar;
 };

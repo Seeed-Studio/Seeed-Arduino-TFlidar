@@ -19,15 +19,17 @@ void setup() {
 }
 
 void loop() {
+  while(!SeeedTFLidar.get_frame_data()){
+      delay(1);
+  }
   // put your main code here, to run repeatedly:
-  // SERIAL.print("dist = ");
-  SeeedTFLidar.get_distance();
-  // SERIAL.print(SeeedTFLidar.get_distance()); //output measure distance value of LiDAR
-  // SERIAL.print('\t');
-  // SERIAL.print("strength = ");
-  // SERIAL.print(SeeedTFLidar.get_strength()); //output signal strength value
-  // SERIAL.print("\t Chip Temprature = ");
-  // SERIAL.print(SeeedTFLidar.get_chip_temperature());
-  // SERIAL.println(" celcius degree"); //output chip temperature of Lidar
-  delay(1000);
+  SERIAL.print("dist = ");
+  SERIAL.print(SeeedTFLidar.get_distance()); //output measure distance value of LiDAR
+  SERIAL.print('\t');
+  SERIAL.print("strength = ");
+  SERIAL.print(SeeedTFLidar.get_strength()); //output signal strength value
+  SERIAL.print("\t Chip Temprature = ");
+  SERIAL.print(SeeedTFLidar.get_chip_temperature());
+  SERIAL.println(" celcius degree"); //output chip temperature of Lidar
+  // delay(1000);
 }

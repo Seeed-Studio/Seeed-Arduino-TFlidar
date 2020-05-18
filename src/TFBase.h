@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
-#define DEBUG_EN
+// #define DEBUG_EN
 #define RECV_HEADER 0x59
 typedef struct {
     uint8_t header[2];
@@ -21,7 +21,7 @@ class TFBase {
         virtual void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200) = 0;
         virtual uint16_t get_distance(void) = 0;
         virtual uint16_t get_strength(void) = 0;
-        virtual uint16_t get_chip_temperature(void) = 0;
+        virtual uint8_t get_chip_temperature(void) = 0;
         virtual uint16_t get_version(void) = 0;
         virtual bool set_output_status(uint8_t * cmd) = 0;
         virtual bool set_comunication_mode(uint8_t * cmd) = 0;
@@ -29,8 +29,8 @@ class TFBase {
         virtual bool reset(uint8_t * cmd) = 0;
         virtual bool factory_reset(uint8_t * cmd) = 0;
         virtual bool save(uint8_t * cmd) = 0;
+        virtual bool get_frame_data(void) = 0;
     protected:
-        virtual bool get_frame_data(recv_package *package);
         virtual bool check_header(recv_package *package);
         virtual bool verify_data(recv_package *package);
 };

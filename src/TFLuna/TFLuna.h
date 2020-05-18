@@ -10,7 +10,7 @@ class TFLuna : public TFBase {
         void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200);
         uint16_t get_distance(void);
         uint16_t get_strength(void);
-        uint16_t get_chip_temperature(void);
+        uint8_t get_chip_temperature(void);
         uint16_t get_version(void){};
         bool set_output_status(uint8_t * cmd){};
         bool set_comunication_mode(uint8_t * cmd){};
@@ -18,11 +18,12 @@ class TFLuna : public TFBase {
         bool reset(uint8_t * cmd){};
         bool factory_reset(uint8_t * cmd){};
         bool save(uint8_t * cmd){};
+        bool get_frame_data(void);
     private:
         Stream *_TFTransporter;
         recv_package *_package = (recv_package*) malloc(sizeof(recv_package));
+        uint8_t uart[9];  //save data measured by LiDAR
     protected:
-        bool get_frame_data(recv_package *package);
         bool check_header(recv_package *package);
         bool verify_data(recv_package *package);
 };
