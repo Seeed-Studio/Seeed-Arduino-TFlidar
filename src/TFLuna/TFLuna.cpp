@@ -1,16 +1,16 @@
 #include"TFLuna.h"
 
-char getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
-char reset[4]={0x5a,0x04,0x02,0x60};//reset
-char enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
-char disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
-char UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
-char I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
-char samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
-char samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
-char samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
-char factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
-char save[4]={0x5a,0x04,0x11,0x6f};//save
+const uint8_t getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
+const uint8_t reset[4]={0x5a,0x04,0x02,0x60};//reset
+const uint8_t enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
+const uint8_t disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
+const uint8_t UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
+const uint8_t I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
+const uint8_t samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
+const uint8_t samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
+const uint8_t samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
+const uint8_t factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
+const uint8_t save[4]={0x5a,0x04,0x11,0x6f};//save
 
 //The response of TFmini Plus. Note: Output frame rate, output enable switch, return command; Modify communication mode, no response, execute directly
 //The response after getting firmware versions
@@ -21,16 +21,16 @@ int return_samplerate[6]={0};
 int return_switch[5]={0};
 //The response after resetting
 int return_reset[5]={0};
-char reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
-char reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
+const uint8_t reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
+const uint8_t reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
 //The response after restoring factory settings
 int return_factoryreset[5]={0};
-char factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
-char factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
+const uint8_t factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
+const uint8_t factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
 //The response after saving
 int return_save[5]={0};
-char save_success[5]={0x5a,0x05,0x11,0x00,0x70};
-char save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
+const uint8_t save_success[5]={0x5a,0x05,0x11,0x00,0x70};
+const uint8_t save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
 
 //prompt information
 String info_getversion="get version ok";
@@ -228,7 +228,7 @@ bool TFLuna::save_config(){
 }
 
 
-bool TFLuna::configure(char down[],int n1,int buff[],char up[],int n2,String info){
+bool TFLuna::configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info){
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);
     }
@@ -270,7 +270,7 @@ bool TFLuna::configure(char down[],int n1,int buff[],char up[],int n2,String inf
     }  
 }
 
-bool TFLuna::configure(char down[],int n1,int buff[],int n2,String info)
+bool TFLuna::configure(uint8_t down[],int n1,int buff[],int n2,String info)
 {
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);
@@ -295,7 +295,7 @@ bool TFLuna::configure(char down[],int n1,int buff[],int n2,String info)
     } 
 }
 
-bool TFLuna::configure(char down[],int n1,String info)
+bool TFLuna::configure(uint8_t down[],int n1,String info)
 {
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);

@@ -28,9 +28,9 @@ class TFLuna : public TFBase {
         //n1 is the number of downs,buff receives response data,
         //up receives theoretical response data in communication protocols,
         //n2 is the number of buff data,info is the prompt information of corresponding instructions
-        bool configure(char down[],int n1,int buff[],char up[],int n2,String info);
-        bool configure(char down[],int n1,int buff[],int n2,String info);
-        bool configure(char down[],int n1,String info);
+        bool configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info);
+        bool configure(uint8_t down[],int n1,int buff[],int n2,String info);
+        bool configure(uint8_t down[],int n1,String info);
     protected:
         bool check_header(recv_package *package);
         bool verify_data(recv_package *package);
