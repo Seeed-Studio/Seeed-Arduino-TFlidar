@@ -5,19 +5,20 @@
 #include <stdint.h>
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
-#define RECV_HEADER 0X59
+#define DEBUG_EN
+#define RECV_HEADER 0x59
 typedef struct {
     uint8_t header[2];
     uint8_t distance[2];
     uint8_t strength[2];
     uint8_t chip_temperature[2];
-    uint8_t checksum;
+    uint16_t checksum;
 } recv_package;
 
 class TFBase {
     public:
-        virtual void begin(SoftwareSerial *TFSerial , uint16_t baud_rate = 115200) = 0;
-        virtual void begin(HardwareSerial *TFSerial , uint16_t baud_rate = 115200);
+        virtual void begin(SoftwareSerial *TFSerial , unsigned long baud_rate = 115200) = 0;
+        virtual void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200) = 0;
         virtual uint16_t get_distance(void) = 0;
         virtual uint16_t get_strength(void) = 0;
         virtual uint16_t get_chip_temperature(void) = 0;

@@ -4,11 +4,11 @@ TFLidar::TFLidar(TFBase *TF_Lidar){
     _TF_Lidar = TF_Lidar;
 }
 
-void TFLidar::begin(SoftwareSerial *TFSerial,uint16_t baud_rate){
+void TFLidar::begin(SoftwareSerial *TFSerial,unsigned long baud_rate){
     _TF_Lidar->begin(TFSerial,baud_rate);
 }
 
-void TFLidar::begin(HardwareSerial *TFSerial,uint16_t baud_rate){
+void TFLidar::begin(HardwareSerial *TFSerial,unsigned long baud_rate){
     _TF_Lidar->begin(TFSerial,baud_rate);
 }
 
