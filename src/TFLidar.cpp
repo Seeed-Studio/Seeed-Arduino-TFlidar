@@ -32,7 +32,6 @@ uint16_t TFLidar::get_version(int buff[]){
     return _TF_Lidar->get_version(buff);
 }
 
-
 bool TFLidar::set_frame_rate(samplerate_mode mode){
     return _TF_Lidar->set_frame_rate(mode);
 }

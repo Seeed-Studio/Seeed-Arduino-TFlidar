@@ -1,5 +1,8 @@
 #include "TFLidar.h"
 
+// #define USETFMINI
+#define USETFLUNA
+
 #define SERIAL Serial
 
 #if defined(ARDUINO_ARCH_SAMD)
@@ -8,8 +11,16 @@
     SoftwareSerial uart(2, 3);
 #endif
 
+#ifdef USETFLUNA
 TFLuna SeeedTFLuna;
 TFLidar SeeedTFLidar(&SeeedTFLuna);
+#endif
+
+#ifdef USETFMINI
+TFMini SeeedTFMini;
+TFLidar SeeedTFLidar(&SeeedTFMini);
+#endif 
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -29,7 +40,10 @@ void loop() {
   SERIAL.print("strength = ");
   SERIAL.print(SeeedTFLidar.get_strength()); //output signal strength value
   SERIAL.print("\t Chip Temprature = ");
+#ifdef USETFLUNA
   SERIAL.print(SeeedTFLidar.get_chip_temperature());
-  SERIAL.println(" celcius degree"); //output chip temperature of Lidar
+  SERIAL.print(" celcius degree"); //output chip temperature of Lidar
+#endif
+  SERIAL.println(" ");
   // delay(1000);
 }

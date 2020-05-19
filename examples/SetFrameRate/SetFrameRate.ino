@@ -1,5 +1,5 @@
 #include "TFLidar.h"
-
+//NOTE this demo cannot work with   TFmini for now
 #define SERIAL Serial
 
 #if defined(ARDUINO_ARCH_SAMD)

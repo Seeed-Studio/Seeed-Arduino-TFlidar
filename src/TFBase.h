@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
-#define DEBUG_EN
+// #define DEBUG_EN
 #define RECV_HEADER 0x59
 typedef struct {
     uint8_t header[2];
@@ -40,4 +40,5 @@ class TFBase {
         virtual bool verify_data(recv_package *package);
 };
 #include "TFLuna/TFLuna.h"
+#include "TFMini/TFMini.h"
 #endif
