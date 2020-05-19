@@ -27,7 +27,7 @@ class TFBase {
         virtual uint16_t get_distance(void) = 0;
         virtual uint16_t get_strength(void) = 0;
         virtual uint8_t get_chip_temperature(void) = 0;
-        virtual uint16_t get_version(void) = 0;
+        virtual uint16_t get_version(int buff[]) = 0;
         virtual bool set_output_status(bool status) = 0;
         virtual bool set_comunication_mode(uint8_t * cmd) = 0;
         virtual bool set_frame_rate(samplerate_mode mode) = 0;

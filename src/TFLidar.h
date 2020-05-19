@@ -12,7 +12,7 @@ class TFLidar{
         uint16_t get_distance(void);
         uint16_t get_strength(void);
         uint8_t get_chip_temperature(void);
-        uint16_t get_version(void);
+        uint16_t get_version(int buff[]);
         bool get_frame_data(void);
 
         bool set_output_status(bool status);

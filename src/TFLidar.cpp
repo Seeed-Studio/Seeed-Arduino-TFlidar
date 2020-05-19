@@ -28,8 +28,8 @@ bool TFLidar::get_frame_data(){
     return _TF_Lidar->get_frame_data();
 }
 
-uint16_t TFLidar::get_version(void){
-    return _TF_Lidar->get_version();
+uint16_t TFLidar::get_version(int buff[]){
+    return _TF_Lidar->get_version(buff);
 }
 
 

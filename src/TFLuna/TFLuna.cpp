@@ -1,16 +1,16 @@
 #include"TFLuna.h"
 
-const uint8_t getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
-const uint8_t reset[4]={0x5a,0x04,0x02,0x60};//reset
-const uint8_t enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
-const uint8_t disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
-const uint8_t UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
-const uint8_t I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
-const uint8_t samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
-const uint8_t samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
-const uint8_t samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
-const uint8_t factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
-const uint8_t save[4]={0x5a,0x04,0x11,0x6f};//save
+uint8_t getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
+uint8_t reset[4]={0x5a,0x04,0x02,0x60};//reset
+uint8_t enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
+uint8_t disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
+uint8_t UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
+uint8_t I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
+uint8_t samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
+uint8_t samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
+uint8_t samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
+uint8_t factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
+uint8_t save[4]={0x5a,0x04,0x11,0x6f};//save
 
 //The response of TFmini Plus. Note: Output frame rate, output enable switch, return command; Modify communication mode, no response, execute directly
 //The response after getting firmware versions
@@ -21,16 +21,16 @@ int return_samplerate[6]={0};
 int return_switch[5]={0};
 //The response after resetting
 int return_reset[5]={0};
-const uint8_t reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
-const uint8_t reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
+uint8_t reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
+uint8_t reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
 //The response after restoring factory settings
 int return_factoryreset[5]={0};
-const uint8_t factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
-const uint8_t factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
+uint8_t factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
+uint8_t factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
 //The response after saving
 int return_save[5]={0};
-const uint8_t save_success[5]={0x5a,0x05,0x11,0x00,0x70};
-const uint8_t save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
+uint8_t save_success[5]={0x5a,0x05,0x11,0x00,0x70};
+uint8_t save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
 
 //prompt information
 String info_getversion="get version ok";
@@ -157,9 +157,18 @@ uint8_t TFLuna::get_chip_temperature(){
     return chip_temperature;
 }
 
-uint16_t TFLuna::get_version(){
+uint16_t TFLuna::get_version(int buff[]){
     configure(getversion,sizeof(getversion),return_version\
     ,sizeof(return_version)/sizeof(int),info_getversion);
+    #ifdef DEBUG_EN
+        for(uint8_t index = 0 ;index < sizeof(return_version)/sizeof(int);index ++){
+            Serial.print(return_version[index],HEX);
+            Serial.print(" ");
+        }
+    #endif
+        for(uint8_t index = 0 ;index < 3;index ++){
+            buff[index] = return_version[index+3];
+        } 
     return true;
 }
 
@@ -229,39 +238,40 @@ bool TFLuna::save_config(){
 
 
 bool TFLuna::configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info){
+    uint8_t num=0;
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);
+        delayMicroseconds(100);
     }
-    uint8_t num=0;
     while(!_TFTransporter->available());
-    while (_TFTransporter->available()){
+    while(true){
         if(_TFTransporter->read()==0x5a){ //assess communication protocol frame header 0x5a
             buff[0]=0x5a;
             for(uint8_t i=1;i<n2;i++){
-                buff[i]=_TFTransporter->read();
+                buff[i]=_TFTransporter->read(); 
                 #ifdef DEBUG_EN
-                Serial.print(buff[i],HEX);
-                Serial.print('\t');
+                    Serial.print(buff[i],HEX);
+                    Serial.print('\t');
                 #endif
             }
             for(uint8_t i=0;i<n2;i++){
                 #ifdef DEBUG_EN
-                Serial.print(up[i],HEX);
-                Serial.print('\t');
+                    Serial.print(up[i],HEX);
+                    Serial.print('\t');
                 #endif                
                 if(buff[i]==up[i]){
-                #ifdef DEBUG_EN
-                Serial.print(buff[i],HEX);
-                Serial.print('\t');
-                #endif
-                num++;
+                    #ifdef DEBUG_EN
+                        Serial.print(buff[i],HEX);
+                        Serial.print('\t');
+                    #endif
+                    num++;
                 }    
             }
             if(num==n2){
                 num=0;
                 #ifdef DEBUG_EN
-                Serial.print(info);
-                Serial.print('\n'); 
+                    Serial.print(info);
+                    Serial.print('\n'); 
                 #endif
                 return true;
             }
@@ -271,24 +281,25 @@ bool TFLuna::configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,Stri
 }
 
 bool TFLuna::configure(uint8_t down[],int n1,int buff[],int n2,String info)
-{
+{   
+    while(_TFTransporter->read());
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);
     }
     while(!_TFTransporter->available());
-    while(_TFTransporter->available()){
+    while(true){
         if(_TFTransporter->read()==0x5a){ //assess communication protocol frame header 0x5a
             buff[0]=0x5a;
             for(uint8_t i=1;i<n2;i++){
                 buff[i]=_TFTransporter->read();
             }
         #ifdef DEBUG_EN
-        for(uint8_t i=0;i<n2;i++){
-            Serial.print(buff[i],HEX);  
-            Serial.print('\t');
-        }
-        Serial.print(info);
-        Serial.print('\n');
+            for(uint8_t i=0;i<n2;i++){
+                Serial.print(buff[i],HEX);  
+                Serial.print('\t');
+            }
+            Serial.print(info);
+            Serial.print('\n');
         #endif 
         return true;
         }
@@ -300,9 +311,9 @@ bool TFLuna::configure(uint8_t down[],int n1,String info)
     for(uint8_t i=0;i<n1;i++){
         _TFTransporter->write(down[i]);
     } 
-#ifdef DEBUG_EN
-  Serial.print(info);
-  Serial.print('\n');  
-#endif 
+    #ifdef DEBUG_EN
+        Serial.print(info);
+        Serial.print('\n');  
+    #endif 
     return true;
 }
