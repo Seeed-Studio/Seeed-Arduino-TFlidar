@@ -1,33 +1,20 @@
 # Seeed_Arduino_TFlidar  [![Build Status](https://travis-ci.com/Seeed-Studio/Seeed-Arduino-TFlidar.svg?branch=master)](https://travis-ci.com/Seeed-Studio/Seeed-Arduino-TFlidar)
 
 ## Introduction
+
 Seeed Arduino lidar is a seeed's library that aim is to drive all lidar of TF.this library having development for now.
 
 ## Usage
 
+this code has been tested on Seeeduino V4.2 by using TF luna.
+
 ```c++
 #include "TFLidar.h"
 
-// #define USETFMINI
-#define USETFLUNA
+SoftwareSerial uart(2, 3);
 
-#define SERIAL Serial
-
-#if defined(ARDUINO_ARCH_SAMD)
-    #define uart  Serial1
-#else
-    SoftwareSerial uart(2, 3);
-#endif
-
-#ifdef USETFLUNA
 TFLuna SeeedTFLuna;
 TFLidar SeeedTFLidar(&SeeedTFLuna);
-#endif
-
-#ifdef USETFMINI
-TFMini SeeedTFMini;
-TFLidar SeeedTFLidar(&SeeedTFMini);
-#endif
 
 void setup() {
   // put your setup code here, to run once:
@@ -43,21 +30,56 @@ void loop() {
   // put your main code here, to run repeatedly:
   SERIAL.print("dist = ");
   SERIAL.print(SeeedTFLidar.get_distance()); //output measure distance value of LiDAR
-  SERIAL.print('\t');
-  SERIAL.print("strength = ");
-  SERIAL.print(SeeedTFLidar.get_strength()); //output signal strength value
-  SERIAL.print("\t Chip Temprature = ");
-#ifdef USETFLUNA
-  SERIAL.print(SeeedTFLidar.get_chip_temperature());
-  SERIAL.print(" celcius degree"); //output chip temperature of Lidar
-#endif
   SERIAL.println(" ");
 }
 ```
 
+## API Reference
 
-This software is written by downey  for seeed studio<br>
-Email:baozhu.zuo@gmail.com
+- begin(SoftwareSerial *TFSerial,unsigned long baud_rate):void
+
+```C++
+SoftwareSerial uart(2, 3);
+SeeedTFLidar.begin(&uart,115200);
+```
+
+- begin(HardwareSerial *TFSerial,unsigned long baud_rate):void
+
+```C++
+SeeedTFLidar.begin(&Serial1,115200);
+```
+
+- get_frame_data:bool
+
+```C++
+while(!SeeedTFLidar.get_frame_data()){
+    delay(1);
+}
+```
+
+- get_distance():uint16_t
+
+```C++
+int distance;
+while(!SeeedTFLidar.get_frame_data()){
+    delay(1);
+}
+distance = SeeedTFLidar.get_distance();
+```
+
+- get_strength():uint16_t
+
+```C++
+int distance;
+while(!SeeedTFLidar.get_frame_data()){
+    delay(1);
+}
+distance = SeeedTFLidar.get_strength();
+```
+
+----
+
+This software is written by seeed studio<br>
 and is licensed under [The MIT License](http://opensource.org/licenses/mit-license.php). Check License.txt for more information.<br>
 
 Contributing to this software is warmly welcomed. You can do this basically by<br>
@@ -69,3 +91,6 @@ Seeed Studio is an open hardware facilitation company based in Shenzhen, China. 
 Benefiting from local manufacture power and convenient global logistic system, <br>
 we integrate resources to serve new era of innovation. Seeed also works with <br>
 global distributors and partners to push open hardware movement.<br>
+
+
+[![Analytics](https://ga-beacon.appspot.com/UA-46589105-3/Grove_LED_Bar)](https://github.com/igrigorik/ga-beacon)
