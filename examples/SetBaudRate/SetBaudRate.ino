@@ -2,9 +2,6 @@
 //NOTE this demo cannot work with   TFmini for now
 #define SERIAL Serial
 
-#define USETFMINI
-// #define USETFLUNA
-
 #if defined(SEEED_XIAO_M0)
     #define uart  Serial1
 #elif defined(SEEED_WIO_TERMINAL)
@@ -13,15 +10,8 @@
     SoftwareSerial uart(2, 3);
 #endif
 
-#ifdef USETFLUNA
 TFLuna SeeedTFLuna;
 TFLidar SeeedTFLidar(&SeeedTFLuna);
-#endif
-
-#ifdef USETFMINI
-TFMini SeeedTFMini;
-TFLidar SeeedTFLidar(&SeeedTFMini);
-#endif 
 
 
 void setup() {

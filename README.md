@@ -6,7 +6,39 @@ Seeed Arduino lidar is a seeed's library that aim is to drive all lidar of TF.th
 
 ## Usage
 
+!!!Note
+   you have to use the SetBaudRate.ino to set baud rate of TF lidar to 9600,if you want to use software serial at the 3.3v mcu.
 this code has been tested on Seeeduino V4.2 by using TF luna.
+
+**this code has been tested on Wio terminal by using TF luna and SoftwareSerial.**
+
+```c++
+#include "TFLidar.h"
+
+SoftwareSerial uart(0, 1);
+
+TFLuna SeeedTFLuna;
+TFLidar SeeedTFLidar(&SeeedTFLuna);
+
+void setup() {
+  // put your setup code here, to run once:
+  SERIAL.begin(9600);
+  while(!Serial);
+  SeeedTFLidar.begin(&uart,9600);
+}
+
+void loop() {
+  while(!SeeedTFLidar.get_frame_data()){
+      delay(20);
+  }
+  // put your main code here, to run repeatedly:
+  SERIAL.print("dist = ");
+  SERIAL.print(SeeedTFLidar.get_distance()); //output measure distance value of LiDAR
+  SERIAL.println(" ");
+}
+```
+
+**this code has been tested on Seeeduino V4.2 by using TF luna.**
 
 ```c++
 #include "TFLidar.h"

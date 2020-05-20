@@ -8,7 +8,7 @@
 #if defined(SEEED_XIAO_M0)
     #define uart  Serial1
 #elif defined(SEEED_WIO_TERMINAL)
-    SoftwareSerial uart(0, 1);
+    #define uart  Serial1
 #else
     SoftwareSerial uart(2, 3);
 #endif
@@ -28,20 +28,12 @@ void setup() {
   // put your setup code here, to run once:
   SERIAL.begin(9600);
   while(!Serial);
-#if defined(SEEED_WIO_TERMINAL)  
-  SeeedTFLidar.begin(&uart,9600);
-#else
   SeeedTFLidar.begin(&uart,115200);
-#endif 
 }
 
 void loop() {
   while(!SeeedTFLidar.get_frame_data()){
-  #if defined(SEEED_WIO_TERMINAL)  
-      delay(20); 
-  #else
-      delay(1); 
-  #endif
+    delay(1); 
   }
   // put your main code here, to run repeatedly:
   SERIAL.print("dist = ");
