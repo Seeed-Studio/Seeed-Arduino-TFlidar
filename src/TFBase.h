@@ -22,8 +22,8 @@ typedef enum{
 
 class TFBase {
     public:
-        virtual void begin(SoftwareSerial *TFSerial , unsigned long baud_rate = 115200) = 0;
-        virtual void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200) = 0;
+        virtual void begin(SoftwareSerial *TFSerial , uint32_t baud_rate = 115200) = 0;
+        virtual void begin(HardwareSerial *TFSerial , uint32_t baud_rate = 115200) = 0;
         virtual uint16_t get_distance(void) = 0;
         virtual uint16_t get_strength(void) = 0;
         virtual uint8_t get_chip_temperature(void) = 0;
@@ -35,6 +35,7 @@ class TFBase {
         virtual bool factory_reset() = 0;
         virtual bool save_config() = 0;
         virtual bool get_frame_data() = 0;
+        virtual bool set_baud_rate(uint32_t baud_rate) = 0;
     protected:
         virtual bool check_header(recv_package *package);
         virtual bool verify_data(recv_package *package);

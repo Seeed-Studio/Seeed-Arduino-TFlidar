@@ -6,8 +6,8 @@
 
 class TFLuna : public TFBase {
     public:
-        void begin(SoftwareSerial *TFSerial , unsigned long baud_rate = 115200);
-        void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200);
+        void begin(SoftwareSerial *TFSerial , uint32_t baud_rate = 115200);
+        void begin(HardwareSerial *TFSerial , uint32_t baud_rate = 115200);
         uint16_t get_distance(void);
         uint16_t get_strength(void);
         uint8_t get_chip_temperature(void);
@@ -18,7 +18,7 @@ class TFLuna : public TFBase {
         bool reset_device(void);
         bool factory_reset(void);
         bool save_config(void);
-        // bool set_baud_rate(void);
+        bool set_baud_rate(uint32_t baud_rate);
         bool get_frame_data(void);
     private:
         Stream *_TFTransporter;

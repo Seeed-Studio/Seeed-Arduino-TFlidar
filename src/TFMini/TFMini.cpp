@@ -105,3 +105,70 @@ uint16_t TFMini::get_strength(){
     uint16_t strength = _package->strength[0] + (uint16_t)_package->strength[1] * 255;
     return strength;
 }
+bool TFMini::set_baud_rate(uint32_t baud_rate){
+    uint8_t baud_rate_array[8] = {0x5a, 0x08, 0x06, 0x80, 0x25, 0x00, 0x00, 0x00};
+    int baud_rate_return[8] = {0};
+    uint16_t check_sum = 0;
+    String baud_rate_info = "baud_rate config successful";
+    if(baud_rate >> 8 > 0xff){
+        baud_rate_array[5] = (baud_rate >> 16) & 0xff;
+        baud_rate_array[4] = (baud_rate >> 8) & 0xff;
+        baud_rate_array[3] = baud_rate & 0xff;
+    }
+    else{
+        baud_rate_array[4] = baud_rate >> 8;
+        baud_rate_array[3] = baud_rate & 0xff;
+    }
+    for (uint8_t index = 0; index < sizeof(baud_rate_array); index ++){
+        check_sum += baud_rate_array[index];
+    }
+    baud_rate_array[7] = (uint8_t)check_sum;
+    configure(baud_rate_array,sizeof(baud_rate_array),baud_rate_return,baud_rate_array\
+    ,sizeof(baud_rate_return)/sizeof(int),baud_rate_info);
+    return true;
+}
+
+bool TFMini::configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info){
+    uint8_t num=0;
+    for(uint8_t i=0;i<n1;i++){
+        _TFTransporter->write(down[i]);
+        delayMicroseconds(100);
+    }
+    while(!_TFTransporter->available());
+    if(down[2] == 0x06) return true;
+    while(true){
+        if(_TFTransporter->read()==0x5a){ //assess communication protocol frame header 0x5a
+            buff[0]=0x5a;
+            for(uint8_t i=1;i<n2;i++){
+                delay(5);
+                buff[i]=_TFTransporter->read(); 
+                #ifdef DEBUG_EN
+                    Serial.print(buff[i],HEX);
+                    Serial.print('\t');
+                #endif
+            }
+            for(uint8_t i=0;i<n2;i++){
+                #ifdef DEBUG_EN
+                    Serial.print(up[i],HEX);
+                    Serial.print('\t');
+                #endif                
+                if(buff[i]==up[i]){
+                    #ifdef DEBUG_EN
+                        Serial.print(buff[i],HEX);
+                        Serial.print('\t');
+                    #endif
+                    num++;
+                }    
+            }
+            if(num==n2){
+                num=0;
+                #ifdef DEBUG_EN
+                    Serial.print(info);
+                    Serial.print('\n'); 
+                #endif
+                return true;
+            }
+            return false;
+        }
+    }  
+}

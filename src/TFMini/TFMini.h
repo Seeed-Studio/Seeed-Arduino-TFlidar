@@ -18,7 +18,7 @@ class TFMini : public TFBase {
         bool reset_device(void){};
         bool factory_reset(void){};
         bool save_config(void){};
-        // bool set_baud_rate(void);
+        bool set_baud_rate(uint32_t baud_rate);
         bool get_frame_data(void);
     private:
         Stream *_TFTransporter;
@@ -28,7 +28,7 @@ class TFMini : public TFBase {
         //n1 is the number of downs,buff receives response data,
         //up receives theoretical response data in communication protocols,
         //n2 is the number of buff data,info is the prompt information of corresponding instructions
-        bool configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info){};
+        bool configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info);
         bool configure(uint8_t down[],int n1,int buff[],int n2,String info){};
         bool configure(uint8_t down[],int n1,String info){};
     protected:
