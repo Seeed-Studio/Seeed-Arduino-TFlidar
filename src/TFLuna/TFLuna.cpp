@@ -1,49 +1,12 @@
 #include"TFLuna.h"
 
-uint8_t getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
-uint8_t reset[4]={0x5a,0x04,0x02,0x60};//reset
-uint8_t enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
-uint8_t disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
-uint8_t UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
-uint8_t I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
-uint8_t samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
-uint8_t samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
-uint8_t samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
-uint8_t factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
-uint8_t save[4]={0x5a,0x04,0x11,0x6f};//save
 
-//The response of TFmini Plus. Note: Output frame rate, output enable switch, return command; Modify communication mode, no response, execute directly
-//The response after getting firmware versions
-int return_version[7]={0};
-//The response after setting samplerate
-int return_samplerate[6]={0};
-//The response after setting enable switch
-int return_switch[5]={0};
-//The response after resetting
-int return_reset[5]={0};
-uint8_t reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
-uint8_t reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
-//The response after restoring factory settings
-int return_factoryreset[5]={0};
-uint8_t factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
-uint8_t factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
-//The response after saving
-int return_save[5]={0};
-uint8_t save_success[5]={0x5a,0x05,0x11,0x00,0x70};
-uint8_t save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
+// uint8_t UART[5]={0x5a,0x05,0x0a,0x00,0x69};//Modify communication mode to UART
+// uint8_t I2C[5]={0x5a,0x05,0x0a,0x01,0x6a};//Modify communication mode to I2C
 
-//prompt information
-String info_getversion="get version ok";
-String info_reset="reset ok";
-String info_enable="enable ok";
-String info_disable="get version ok";
-String info_UART="UART ok";
-String info_I2C="I2C ok";
-String info_samplerate_01="samplerate_01 ok";
-String info_samplerate_10="samplerate_10 ok";
-String info_samplerate_100="samplerate_100 ok";
-String info_factoryreset="factoryreset ok";
-String info_save="save ok";
+// String info_UART="UART ok";
+// String info_I2C="I2C ok";
+
 
 void TFLuna::begin(SoftwareSerial *TFSerial,uint32_t baud_rate){
     TFSerial->begin(baud_rate);
@@ -159,6 +122,9 @@ uint8_t TFLuna::get_chip_temperature(){
 }
 
 uint16_t TFLuna::get_version(int buff[]){
+    uint8_t getversion[4]={0x5a,0x04,0x01,0x5f};//Get firmware version
+    int return_version[7]={0};//The response after getting firmware versions
+    String info_getversion="get version ok";
     configure(getversion,sizeof(getversion),return_version\
     ,sizeof(return_version)/sizeof(int),info_getversion);
     #ifdef DEBUG_EN
@@ -174,6 +140,12 @@ uint16_t TFLuna::get_version(int buff[]){
 }
 
 bool TFLuna::set_output_status(bool status){
+    //The response after setting enable switch
+    int return_switch[5]={0};
+    uint8_t enable[5]={0x5a,0x05,0x07,0x00,0x66};//Enable data output
+    uint8_t disable[5]={0x5a,0x05,0x07,0x01,0x67};//Disable data output 
+    String info_disable="disable ok";
+    String info_enable="enable ok";
     if(status){
         if(configure(enable,sizeof(enable),return_switch,enable\
         ,sizeof(return_switch)/sizeof(int),info_enable)){
@@ -189,6 +161,14 @@ bool TFLuna::set_output_status(bool status){
     return false;
 }
 bool TFLuna::set_frame_rate(samplerate_mode mode){
+    uint8_t samplerate_01[6]={0x5a,0x06,0x03,0x01,0x00,0x64};//Set the frame rate  to 1Hz  
+    uint8_t samplerate_10[6]={0x5a,0x06,0x03,0x0a,0x00,0x6d};//Set the frame rate  to 10Hz 
+    uint8_t samplerate_100[6]={0x5a,0x06,0x03,0x64,0x00,0xc7};//Set the frame rate  to 100Hz 
+    //The response after setting samplerate
+    int return_samplerate[6]={0};
+    String info_samplerate_01="samplerate_01 ok";
+    String info_samplerate_10="samplerate_10 ok";
+    String info_samplerate_100="samplerate_100 ok";
     if(SAMPLERATE_1HZ == mode){
         if(configure(samplerate_01,sizeof(samplerate_01),return_samplerate,samplerate_01 \
         ,sizeof(return_samplerate)/sizeof(int),info_samplerate_01)){
@@ -214,6 +194,11 @@ bool TFLuna::set_frame_rate(samplerate_mode mode){
 }
 
 bool TFLuna::reset_device(){
+    uint8_t reset[4]={0x5a,0x04,0x02,0x60};//reset
+    int return_reset[5]={0};//The response after resetting
+    uint8_t reset_success[5]={0x5a,0x05,0x02,0x00,0x60};
+    uint8_t reset_fail[5]={0x5a,0x05,0x02,0x01,0x61};
+    String info_reset="reset ok";
     if(configure(reset,sizeof(reset),return_reset,\
     reset_success,sizeof(return_reset)/sizeof(int),info_reset)){
         return true;
@@ -222,6 +207,12 @@ bool TFLuna::reset_device(){
 }
 
 bool TFLuna::factory_reset(){
+    uint8_t factoryreset[4]={0x5a,0x04,0x10,0x6e};//Restore factory settings
+    uint8_t factoryreset_success[5]={0x5a,0x05,0x10,0x00,0x6e};
+    uint8_t factoryreset_fail[5]={0x5a,0x05,0x10,0x01,0x6f};
+    //The response after restoring factory settings
+    int return_factoryreset[5]={0};
+    String info_factoryreset="factoryreset ok";
     if(configure(factoryreset,sizeof(factoryreset),return_factoryreset,\
     factoryreset_success,sizeof(return_factoryreset)/sizeof(int),info_factoryreset)){
         return true;
@@ -230,6 +221,12 @@ bool TFLuna::factory_reset(){
 }
 
 bool TFLuna::save_config(){
+    uint8_t save[4]={0x5a,0x04,0x11,0x6f};//save
+    //The response after saving
+    int return_save[5]={0};
+    uint8_t save_success[5]={0x5a,0x05,0x11,0x00,0x70};
+    uint8_t save_fail[5]={0x5a,0x05,0x11,0x01,0x71};
+    String info_save="save ok";
     if(configure(save,sizeof(save),return_save,save_success,\
     sizeof(return_save)/sizeof(int),info_save)){
         return true;
