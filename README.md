@@ -11,39 +11,17 @@ Seeed Arduino lidar is a seeed's library that aim is to drive all lidar of TF.th
 this code has been tested on Seeeduino V4.2 by using TF luna.
 
 **this code has been tested on Wio terminal by using TF luna and SoftwareSerial.**
-
-```c++
-#include "TFLidar.h"
-
-SoftwareSerial uart(0, 1);
-
-TFLuna SeeedTFLuna;
-TFLidar SeeedTFLidar(&SeeedTFLuna);
-
-void setup() {
-  // put your setup code here, to run once:
-  SERIAL.begin(9600);
-  while(!Serial);
-  SeeedTFLidar.begin(&uart,9600);
-}
-
-void loop() {
-  while(!SeeedTFLidar.get_frame_data()){
-      delay(20);
-  }
-  // put your main code here, to run repeatedly:
-  SERIAL.print("dist = ");
-  SERIAL.print(SeeedTFLidar.get_distance()); //output measure distance value of LiDAR
-  SERIAL.println(" ");
-}
-```
-
 **this code has been tested on Seeeduino V4.2 by using TF luna.**
 
 ```c++
 #include "TFLidar.h"
+#define USE_3V3_SOFT_SERIAL
 
-SoftwareSerial uart(2, 3);
+#ifdef USE_3V3_SOFT_SERIAL
+  SoftwareSerial uart(0, 1);
+#else
+  SoftwareSerial uart(2, 3);
+#endif
 
 TFLuna SeeedTFLuna;
 TFLidar SeeedTFLidar(&SeeedTFLuna);
@@ -52,12 +30,20 @@ void setup() {
   // put your setup code here, to run once:
   SERIAL.begin(9600);
   while(!Serial);
-  SeeedTFLidar.begin(&uart);
+#ifdef USE_3V3_SOFT_SERIAL
+  SeeedTFLidar.begin(&uart,9600);
+#else
+  SeeedTFLidar.begin(&uart,115200);
+#endif
 }
 
 void loop() {
   while(!SeeedTFLidar.get_frame_data()){
+  #ifdef USE_3V3_SOFT_SERIAL
+      delay(20);
+  #else
       delay(1);
+  #endif
   }
   // put your main code here, to run repeatedly:
   SERIAL.print("dist = ");
