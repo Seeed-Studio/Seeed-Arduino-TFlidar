@@ -51,9 +51,8 @@ bool TFMini::verify_data(recv_package *package){
 }
 
 bool TFMini::get_frame_data(void){
-    if(!_TFTransporter->available()){
-        return false;
-    }  
+    while(_TFTransporter->read() >= 0);    
+    while(!(9 == _TFTransporter->available()));
     uint16_t check;
     if(!check_header(_package)){
         return false;

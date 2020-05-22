@@ -25,7 +25,7 @@ bool TFLuna::check_header(recv_package *package){
 #endif  
     for(uint8_t index = 0; index < 2; index++){
         package->header[index] = 0x00;
-        package->header[index] = (uint8_t)_TFTransporter->read(); 
+        package->header[index] = (uint8_t)_TFTransporter->read();
         if(RECV_HEADER != package->header[index]){
 #ifdef DEBUG_EN
             Serial.println("failed");
@@ -60,9 +60,8 @@ bool TFLuna::verify_data(recv_package *package){
 }
 
 bool TFLuna::get_frame_data(void){
-    if(!_TFTransporter->available()){
-        return false;
-    }  
+    while(_TFTransporter->read() >= 0);    
+    while(!(9 == _TFTransporter->available()));
     uint16_t check;
     if(!check_header(_package)){
         return false;
