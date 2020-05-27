@@ -61,7 +61,7 @@ bool TFLuna::verify_data(recv_package *package){
 
 bool TFLuna::get_frame_data(void){
     while(_TFTransporter->read() >= 0);    
-    while(!(9 == _TFTransporter->available()));
+    while(!(9 < _TFTransporter->available()));
     uint16_t check;
     if(!check_header(_package)){
         return false;
