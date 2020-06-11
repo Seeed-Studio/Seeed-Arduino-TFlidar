@@ -97,7 +97,7 @@ bool TFMini::get_frame_data(void){
 
 uint16_t TFMini::get_distance(){
     uint16_t distance = _package->distance[0] + (uint16_t)_package->distance[1] * 255;
-    return distance < 300 ? distance : 300;
+    return distance < 1200 ? distance : 1200;
 }
 
 uint16_t TFMini::get_strength(){
