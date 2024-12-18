@@ -13,7 +13,7 @@ class TFLuna : public TFBase {
         uint8_t get_chip_temperature(void);
         uint16_t get_version(int buff[]);
         bool set_output_status(bool status);
-        bool set_comunication_mode(uint8_t * cmd){};
+        bool set_comunication_mode(uint8_t * cmd) { return true; };
         bool set_frame_rate(samplerate_mode mode);
         bool reset_device(void);
         bool factory_reset(void);

@@ -10,14 +10,14 @@ class TFMini : public TFBase {
         void begin(HardwareSerial *TFSerial , unsigned long baud_rate = 115200);
         uint16_t get_distance(void);
         uint16_t get_strength(void);
-        uint8_t get_chip_temperature(void){};
-        uint16_t get_version(int buff[]){};
-        bool set_output_status(bool status){};
-        bool set_comunication_mode(uint8_t * cmd){};
-        bool set_frame_rate(samplerate_mode mode){};
-        bool reset_device(void){};
-        bool factory_reset(void){};
-        bool save_config(void){};
+        uint8_t get_chip_temperature(void) { return 0; };
+        uint16_t get_version(int buff[]) { return 0; };
+        bool set_output_status(bool status) { return true; };
+        bool set_comunication_mode(uint8_t * cmd) { return true; };
+        bool set_frame_rate(samplerate_mode mode) { return true; };
+        bool reset_device(void) { return true; };
+        bool factory_reset(void) { return true; };
+        bool save_config(void) { return true; };
         bool set_baud_rate(uint32_t baud_rate);
         bool get_frame_data(void);
     private:
@@ -29,8 +29,8 @@ class TFMini : public TFBase {
         //up receives theoretical response data in communication protocols,
         //n2 is the number of buff data,info is the prompt information of corresponding instructions
         bool configure(uint8_t down[],int n1,int buff[],uint8_t up[],int n2,String info);
-        bool configure(uint8_t down[],int n1,int buff[],int n2,String info){};
-        bool configure(uint8_t down[],int n1,String info){};
+        bool configure(uint8_t down[],int n1,int buff[],int n2,String info) { return true; };
+        bool configure(uint8_t down[],int n1,String info) { return true; };
     protected:
         bool check_header(recv_package *package);
         bool verify_data(recv_package *package);
